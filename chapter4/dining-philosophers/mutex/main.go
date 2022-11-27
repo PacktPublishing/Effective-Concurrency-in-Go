@@ -11,7 +11,7 @@ func philosopher(index int, leftFork, rightFork *sync.Mutex) {
 	for {
 		// Think for some time
 		fmt.Printf("Philospher %d is thinking\n", index)
-		time.Sleep(time.Duration(rand.Intn(1000)))
+		time.Sleep(time.Millisecond * time.Duration(rand.Intn(1000)))
 		// Get left fork
 		leftFork.Lock()
 		fmt.Printf("Philosopher %d got left fork\n", index)
@@ -20,7 +20,7 @@ func philosopher(index int, leftFork, rightFork *sync.Mutex) {
 			fmt.Printf("Philosopher %d got right fork\n", index)
 			// Eat
 			fmt.Printf("Philosopher %d is eating\n", index)
-			time.Sleep(time.Duration(rand.Intn(1000)))
+			time.Sleep(time.Millisecond * time.Duration(rand.Intn(1000)))
 			rightFork.Unlock()
 		}
 		leftFork.Unlock()

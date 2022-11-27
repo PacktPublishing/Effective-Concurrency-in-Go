@@ -13,7 +13,7 @@ func producer(index int, wg *sync.WaitGroup, done chan struct{}, output chan<- i
 		// Produce a value
 		value := rand.Int()
 		// Wait a bit
-		time.Sleep(time.Duration(rand.Intn(1000)))
+		time.Sleep(time.Millisecond * time.Duration(rand.Intn(1000)))
 		// Send the value
 		select {
 		case output <- value:

@@ -8,9 +8,9 @@ import (
 )
 
 type Limiter struct {
-	sync.Mutex
+	mu sync.Mutex
 	// Bucket is filled with rate tokens per second
-	rate float64
+	rate int
 	// Bucket size
 	bucketSize int
 	// Number of tokens in bucket
@@ -20,17 +20,17 @@ type Limiter struct {
 }
 
 func (s *Limiter) Wait() {
-	s.Lock()
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	if s.nTokens > 0 {
 		s.nTokens--
-		s.Unlock()
 		return
 	}
 	// Here, there is not enough tokens in the bucket
 	tElapsed := time.Since(s.lastToken)
-	period := time.Duration(1.0 / float64(s.rate) * 1000000000)
-	nTokens := int(tElapsed.Nanoseconds() / period.Nanoseconds())
-	s.nTokens = nTokens
+	period := time.Second / time.Duration(s.rate)
+	nTokens := tElapsed.Nanoseconds() / period.Nanoseconds()
+	s.nTokens = int(nTokens)
 	if s.nTokens > s.bucketSize {
 		s.nTokens = s.bucketSize
 	}
@@ -38,7 +38,6 @@ func (s *Limiter) Wait() {
 	// We filled the bucket. There may not be enough
 	if s.nTokens > 0 {
 		s.nTokens--
-		s.Unlock()
 		return
 	}
 	// We have to wait until more tokens are available
@@ -49,10 +48,9 @@ func (s *Limiter) Wait() {
 		time.Sleep(wait)
 	}
 	s.lastToken = next
-	s.Unlock()
 }
 
-func NewLimiter(rate float64, limit int) *Limiter {
+func NewLimiter(rate int, limit int) *Limiter {
 	return &Limiter{
 		rate:       rate,
 		bucketSize: limit,
