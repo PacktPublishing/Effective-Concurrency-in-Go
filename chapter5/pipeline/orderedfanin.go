@@ -7,18 +7,18 @@ import (
 	"sync"
 )
 
-type indexable interface {
-	getIndex() int
+type sequenced interface {
+	getSequence() int
 }
 
-type fanInRecord[T indexable] struct {
+type fanInRecord[T sequenced] struct {
 	index int
 	data  T
 	pause chan struct{}
 }
 
-func orderedFanIn[T indexable](done <-chan struct{}, channels ...<-chan T) <-chan T {
-	queue := make(chan fanInRecord[T])
+func orderedFanIn[T sequenced](done <-chan struct{}, channels ...<-chan T) <-chan T {
+	fanInCh := make(chan fanInRecord[T])
 	wg := sync.WaitGroup{}
 	for i := range channels {
 		pauseCh := make(chan struct{})
@@ -33,7 +33,7 @@ func orderedFanIn[T indexable](done <-chan struct{}, channels ...<-chan T) <-cha
 					if !ok {
 						return
 					}
-					queue <- fanInRecord[T]{
+					fanInCh <- fanInRecord[T]{
 						index: index,
 						data:  data,
 						pause: pause,
@@ -51,7 +51,7 @@ func orderedFanIn[T indexable](done <-chan struct{}, channels ...<-chan T) <-cha
 	}
 	go func() {
 		wg.Wait()
-		close(queue)
+		close(fanInCh)
 	}()
 	outputCh := make(chan T)
 	go func() {
@@ -59,9 +59,9 @@ func orderedFanIn[T indexable](done <-chan struct{}, channels ...<-chan T) <-cha
 		// The next record expected
 		expected := 1
 		queuedData := make([]*fanInRecord[T], len(channels))
-		for in := range queue {
+		for in := range fanInCh {
 			// If this input is what is expected, send it to the output
-			if in.data.getIndex() == expected {
+			if in.data.getSequence() == expected {
 				select {
 				case outputCh <- in.data:
 					in.pause <- struct{}{}
@@ -71,7 +71,7 @@ func orderedFanIn[T indexable](done <-chan struct{}, channels ...<-chan T) <-cha
 					for !allDone {
 						allDone = true
 						for i, d := range queuedData {
-							if d != nil && d.data.getIndex() == expected {
+							if d != nil && d.data.getSequence() == expected {
 								select {
 								case outputCh <- d.data:
 									queuedData[i] = nil

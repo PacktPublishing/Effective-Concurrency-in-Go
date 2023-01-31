@@ -48,7 +48,7 @@ func encode(input Record) []byte {
 	return data
 }
 
-func (r Record) getIndex() int { return r.Row }
+func (r Record) getSequence() int { return r.Row }
 
 func main() {
 	for _, pipeline := range []func(*csv.Reader){
