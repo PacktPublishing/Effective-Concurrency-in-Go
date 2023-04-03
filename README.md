@@ -1,6 +1,6 @@
 # Effective Concurrency in Go
 
-<a href="https://www.amazon.com/dp/1804619078"><img src="https://m.media-amazon.com/images/I/41aByLBIBcL._SX403_BO1,204,203,200_.jpg" alt="Effective Concurrency in Go" height="256px" align="right"></a>
+<a href="https://www.amazon.com/dp/1804619078"><img src="" alt="Effective Concurrency in Go" height="256px" align="right"></a>
 
 This is the code repository for [Effective Concurrency in Go](https://www.amazon.com/dp/1804619078), published by Packt.
 
