@@ -60,3 +60,8 @@ We also provide a PDF file that has color images of the screenshots/diagrams use
 is a software engineer with over 30 years of experience in designing and developing distributed enterprise applications that scale. He’s worked for several startups and large corporations like Thomson and Red Hat as an engineer and technical lead.
 
 He’s one of the co-founders of Cloud Privacy Labs where he works on semantic interoperability and privacy technologies for centralized and decentralized systems. He tries to answer at least one question on StackOverflow every day. Burak holds BSc and MSc degrees in Electrical and Electronics Engineering, and an MSc degree in Computer Science.
+
+### Download a free PDF
+
+ <i>If you have already purchased a print or Kindle version of this book, you can get a DRM-free PDF version at no cost.<br>Simply click on the link to claim your free PDF.</i>
+<p align="center"> <a href="https://packt.link/free-ebook/9781804619070">https://packt.link/free-ebook/9781804619070 </a> </p>
