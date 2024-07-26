@@ -2,7 +2,7 @@
 
 ## Chapter 1
 
-  * Page 4: The 5th bullet points says:
+  * Page 4: The 5th bullet point says:
   
    > There are 128 distinct states in the composite system. (For each state of system 1, system 2 can be in 7 distinct states, so 2^7=128.)
    
